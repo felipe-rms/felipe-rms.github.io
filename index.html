@@ -1,231 +1,181 @@
 <!DOCTYPE html>
-<html class="transition bg-[var(--page-bg)] md:text-[16px] text-[14px]" lang="pt-BR">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="TCC sobre Redução de Dimensionalidade: Comparação entre t-SNE e UMAP">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TCC - Felipe Barboza</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <style>
-        #post-container :first-child{animation-delay:calc(var(--content-delay) + 0ms)}
-        #post-container :nth-child(2){animation-delay:calc(var(--content-delay) + 50ms)}
-        #post-container :nth-child(3){animation-delay:calc(var(--content-delay) + .1s)}
-        #post-container :nth-child(4){animation-delay:calc(var(--content-delay) + 175ms)}
-        #post-container :nth-child(5){animation-delay:calc(var(--content-delay) + .25s)}
-        #post-container :nth-child(6){animation-delay:calc(var(--content-delay) + 325ms)}
-        
-        :root {
-            --page-bg: #ffffff;
-            --primary: #4f46e5;
-            --card-bg: #ffffff;
-            --text: #1f2937;
-            --text-light: #6b7280;
-        }
-        
         body {
             font-family: 'Inter', sans-serif;
-            color: var(--text);
-            background-color: var(--page-bg);
+            color: #1f2937;
+            background-color: #ffffff;
             margin: 0;
-            padding: 0;
-        }
-        
-        .card-base {
-            background-color: var(--card-bg);
-            border-radius: 0.75rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            padding: 1.5rem;
-        }
-        
-        .prose {
-            max-width: 65ch;
-            margin-left: auto;
-            margin-right: auto;
+            padding: 2rem;
             line-height: 1.6;
         }
         
-        .btn-plain {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
         }
         
-        .btn-plain:hover {
-            background-color: rgba(79, 70, 229, 0.1);
+        h1, h2, h3 {
+            color: #1f2937;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #4f46e5;
+            padding-bottom: 1rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            color: #4f46e5;
+        }
+        
+        ul, ol {
+            padding-left: 1.5rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f3f4f6;
+        }
+        
+        .author-info {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+            font-size: 0.9rem;
+            color: #6b7280;
         }
     </style>
 </head>
-<body class="transition min-h-screen">
-    <div id="config-carrier" data-hue="250"></div>
-    
-    <div class="w-full absolute" id="banner-wrapper">
-        <div class="relative overflow-hidden h-full hidden object-center object-cover">
-            <div class="transition absolute pointer-events-none bg-opacity-50 dark:bg-black/10 inset-0"></div>
-            <img alt="Banner image" class="w-full h-full object-center object-cover" loading="lazy" src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" width="1920">
+<body>
+    <div class="container">
+        <h1>Redução de Dimensionalidade: Comparação entre t-SNE e UMAP</h1>
+        
+        <div class="author-info">
+            <p><strong>Aluno:</strong> Felipe Pereira Ramos Barboza</p>
+            <p><strong>Orientadora:</strong> Profa. Dra. Nina Sumiko Tomita Hirata</p>
+            <p>Universidade de São Paulo - Instituto de Matemática e Estatística</p>
+            <p>Bacharelado em Ciência da Computação</p>
+        </div>
+        
+        <h2 id="introducao">📑 Introdução</h2>
+        <p>A redução de dimensionalidade é uma técnica fundamental em aprendizado de máquina e análise de dados, permitindo a visualização e interpretação de conjuntos de dados complexos e de alta dimensionalidade. Entre os métodos mais populares atualmente estão o t-SNE (t-Distributed Stochastic Neighbor Embedding) e o UMAP (Uniform Manifold Approximation and Projection), ambos amplamente utilizados para visualização de dados.</p>
+        
+        <h2 id="objetivos">🎯 Objetivos</h2>
+        <p>Este trabalho tem como objetivo principal realizar um estudo comparativo detalhado entre os métodos t-SNE e UMAP, avaliando não apenas suas características algorítmicas, mas também a qualidade perceptiva das projeções geradas por cada método. Os objetivos específicos incluem:</p>
+        <ul>
+            <li>Estudo teórico detalhado dos algoritmos t-SNE e UMAP</li>
+            <li>Implementação e aplicação dos métodos em conjuntos de dados de referência</li>
+            <li>Análise comparativa utilizando métricas de qualidade visual para quantificar a percepção das projeções</li>
+            <li>Avaliação da separação de classes em problemas supervisionados</li>
+            <li>Estudo da preservação de estruturas locais e globais nos dados</li>
+            <li>Análise de sensibilidade aos parâmetros de cada algoritmo</li>
+        </ul>
+        
+        <h2 id="metodologia">🔬 Metodologia</h2>
+        <p>A metodologia do trabalho consistirá em:</p>
+        <ol>
+            <li>Revisão teórica dos algoritmos t-SNE e UMAP, incluindo suas formulações matemáticas e parâmetros principais</li>
+            <li>Implementação dos métodos (ou utilização de bibliotecas estabelecidas como scikit-learn e umap-learn)</li>
+            <li>Seleção de conjuntos de dados de referência com diferentes características (tamanho, dimensionalidade, número de classes)</li>
+            <li>Aplicação dos métodos e avaliação utilizando métricas quantitativas de qualidade de projeção</li>
+            <li>Análise qualitativa das visualizações geradas</li>
+            <li>Comparação sistemática dos resultados</li>
+        </ol>
+        
+        <h2 id="metricas">📊 Métricas de Avaliação</h2>
+        <p>Para avaliar a qualidade das projeções, serão consideradas métricas como:</p>
+        <ul>
+            <li>Trustworthiness e Continuity (medidas de preservação de vizinhança)</li>
+            <li>Coerência local (Local Consistency - LC)</li>
+            <li>Coerência global (Global Consistency - GC)</li>
+            <li>Separabilidade de classes (Class Separation Metric)</li>
+            <li>Métricas baseadas em distâncias (como a correlação entre distâncias originais e projetadas)</li>
+        </ul>
+        
+        <h2 id="resultados">📈 Resultados Esperados</h2>
+        <p>Espera-se que este trabalho contribua com:</p>
+        <ul>
+            <li>Uma análise comparativa abrangente entre t-SNE e UMAP</li>
+            <li>Diretrizes para a escolha do método mais adequado para diferentes tipos de dados e objetivos</li>
+            <li>Insights sobre a configuração ótima de parâmetros para cada método</li>
+            <li>Possíveis melhorias ou combinações dos métodos</li>
+        </ul>
+        
+        <h2 id="cronograma">⏳ Cronograma</h2>
+        <table>
+            <tr>
+                <th>Período</th>
+                <th>Atividades</th>
+            </tr>
+            <tr>
+                <td>Mês 1-2</td>
+                <td>Revisão bibliográfica e estudo teórico dos métodos</td>
+            </tr>
+            <tr>
+                <td>Mês 3-4</td>
+                <td>Implementação e testes preliminares</td>
+            </tr>
+            <tr>
+                <td>Mês 5-6</td>
+                <td>Experimentos e coleta de resultados</td>
+            </tr>
+            <tr>
+                <td>Mês 7-8</td>
+                <td>Análise dos resultados e redação do trabalho</td>
+            </tr>
+        </table>
+        
+        <h2 id="referencias">📚 Referências</h2>
+        <ul>
+            <li><a href="https://jmlr.org/papers/v9/vandermaaten08a.html">van der Maaten, L., & Hinton, G. (2008). Visualizing data using t-SNE. Journal of Machine Learning Research.</a></li>
+            <li><a href="https://arxiv.org/abs/1802.03426">McInnes, L., Healy, J., & Melville, J. (2018). UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction. arXiv preprint arXiv:1802.03426.</a></li>
+            <li><a href="https://www.nature.com/articles/s41598-019-45301-0">Becht, E., et al. (2019). Dimensionality reduction for visualizing single-cell data using UMAP. Nature Biotechnology.</a></li>
+            <li><a href="https://ieeexplore.ieee.org/document/6797061">Venna, J., et al. (2010). Information retrieval perspective to nonlinear dimensionality reduction for data visualization. Journal of Machine Learning Research.</a></li>
+        </ul>
+        
+        <div class="footer">
+            <p>(cc) 2023 Felipe Pereira Ramos Barboza. CC BY-NC 4.0.</p>
         </div>
     </div>
-    
-    <div class="relative gap-4 grid grid-cols-[17.5rem_auto] grid-rows-[auto_auto_1fr_auto] lg:grid-rows-[auto_1fr_auto] max-w-[var(--page-width)] md:px-4 min-h-screen mx-auto px-0">
-        <div class="onload-animation col-span-2 grid-rows-1 z-50" id="top-row">
-            <div class="flex items-center justify-between card-base h-[4.5rem] max-w-[var(--page-width)] mx-auto overflow-visible px-4 rounded-t-none sticky top-0">
-                <a href="/" class="rounded-lg btn-plain active:scale-95 font-bold px-5 h-[3.25rem]">
-                    <div class="flex items-center flex-row text-[var(--primary)] text-md">
-                        Felipe Barboza
-                    </div>
-                </a>
-                <div class="hidden md:flex">
-                    <a href="/" class="rounded-lg btn-plain h-11 active:scale-95 font-bold px-5" aria-label="Home">Home</a>
-                    <a href="/archive" class="rounded-lg btn-plain h-11 active:scale-95 font-bold px-5" aria-label="Archive">Archive</a>
-                    <a href="/about" class="rounded-lg btn-plain h-11 active:scale-95 font-bold px-5" aria-label="About">About</a>
-                    <a href="/tcc" class="rounded-lg btn-plain h-11 active:scale-95 font-bold px-5" aria-label="TCC">TCC</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="w-full col-span-2 lg:col-span-1 lg:max-w-[17.5rem] lg:row-end-3 lg:row-start-2 onload-animation row-end-4 row-start-3" id="sidebar">
-            <div class="flex w-full flex-col gap-4 mb-4">
-                <div class="card-base">
-                    <a href="/about" class="relative overflow-hidden mx-auto active:scale-95 block group lg:max-w-none lg:mt-3 lg:mx-3 max-w-[240px] mb-3 mt-4 rounded-xl" aria-label="Go to About Page">
-                        <div class="relative overflow-hidden h-full lg:mt-0 lg:w-full mx-auto">
-                            <img alt="Profile Image" class="w-full h-full object-center object-cover" loading="lazy" src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" width="200">
-                        </div>
-                    </a>
-                    <div class="transition font-bold dark:text-neutral-50 mb-1 text-center text-xl">Felipe Pereira Ramos Barboza</div>
-                    <div class="transition mb-2 bg-[var(--primary)] h-1 mx-auto rounded-full w-5"></div>
-                    <div class="transition text-center mb-2.5 text-neutral-400">Graduando em Ciência da Computação no IME-USP</div>
-                    <div class="flex justify-center gap-2 mb-4 mx-2">
-                        <a href="https://github.com/seu-usuario" class="rounded-lg active:scale-90 btn-regular h-10 w-10" aria-label="GitHub" target="_blank">
-                            <svg data-icon="fa6-brands:github" height="1.5rem" width="1.5rem">
-                                <use href="#ai:fa6-brands:github"></use>
-                            </svg>
-                        </a>
-                        <a href="https://linkedin.com/in/seu-perfil" class="rounded-lg active:scale-90 btn-regular h-10 w-10" aria-label="Linkedin" target="_blank">
-                            <svg data-icon="fa6-brands:linkedin" height="1.5rem" width="1.5rem">
-                                <use href="#ai:fa6-brands:linkedin"></use>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="overflow-hidden col-span-2 lg:col-span-1 onload-animation row-end-3 row-start-2" id="content-wrapper">
-            <main class="transition-fade" id="swup">
-                <div class="flex relative min-h-32 overflow-hidden rounded-[var(--radius-large)] w-full">
-                    <div class="relative w-full card-base px-9 py-6 z-10">
-                        <h1 class="text-center dark:prose-invert prose font-bold mb-8 text-4xl">Redução de Dimensionalidade: Comparação entre t-SNE e UMAP</h1>
-                        <h2 class="text-center dark:prose-invert prose text-xl mb-6" style="text-align:center;margin:0 auto;margin-bottom:2rem">
-                            <strong>Aluno:</strong> Felipe Pereira Ramos Barboza<br>
-                            <strong>Orientadora:</strong> Profa. Dra. Nina Sumiko Tomita Hirata<br>
-                        </h2>
-                        <h2 class="text-center dark:prose-invert prose font-bold mb-8 text-xl" style="text-align:center;margin:0 auto;margin-bottom:2rem">
-                            Universidade de São Paulo<br>
-                            Instituto de Matemática e Estatística<br>
-                            Bacharelado em Ciência da Computação<br>
-                        </h2>
-                        
-                        <div class="dark:prose-invert prose custom-md max-w-none mt-2 prose-base" data-pagefind-body>
-                            <h2 id="introducao">📑 Introdução</h2>
-                            <p>A redução de dimensionalidade é uma técnica fundamental em aprendizado de máquina e análise de dados, permitindo a visualização e interpretação de conjuntos de dados complexos e de alta dimensionalidade. Entre os métodos mais populares atualmente estão o t-SNE (t-Distributed Stochastic Neighbor Embedding) e o UMAP (Uniform Manifold Approximation and Projection), ambos amplamente utilizados para visualização de dados.</p>
-                            
-                            <h2 id="objetivos">🎯 Objetivos</h2>
-                            <p>Este trabalho tem como objetivo principal realizar um estudo comparativo detalhado entre os métodos t-SNE e UMAP, avaliando não apenas suas características algorítmicas, mas também a qualidade perceptiva das projeções geradas por cada método. Os objetivos específicos incluem:</p>
-                            <ul>
-                                <li>Estudo teórico detalhado dos algoritmos t-SNE e UMAP</li>
-                                <li>Implementação e aplicação dos métodos em conjuntos de dados de referência</li>
-                                <li>Análise comparativa utilizando métricas de qualidade visual para quantificar a percepção das projeções</li>
-                                <li>Avaliação da separação de classes em problemas supervisionados</li>
-                                <li>Estudo da preservação de estruturas locais e globais nos dados</li>
-                                <li>Análise de sensibilidade aos parâmetros de cada algoritmo</li>
-                            </ul>
-                            
-                            <h2 id="metodologia">🔬 Metodologia</h2>
-                            <p>A metodologia do trabalho consistirá em:</p>
-                            <ol>
-                                <li>Revisão teórica dos algoritmos t-SNE e UMAP, incluindo suas formulações matemáticas e parâmetros principais</li>
-                                <li>Implementação dos métodos (ou utilização de bibliotecas estabelecidas como scikit-learn e umap-learn)</li>
-                                <li>Seleção de conjuntos de dados de referência com diferentes características (tamanho, dimensionalidade, número de classes)</li>
-                                <li>Aplicação dos métodos e avaliação utilizando métricas quantitativas de qualidade de projeção</li>
-                                <li>Análise qualitativa das visualizações geradas</li>
-                                <li>Comparação sistemática dos resultados</li>
-                            </ol>
-                            
-                            <h2 id="metricas">📊 Métricas de Avaliação</h2>
-                            <p>Para avaliar a qualidade das projeções, serão consideradas métricas como:</p>
-                            <ul>
-                                <li>Trustworthiness e Continuity (medidas de preservação de vizinhança)</li>
-                                <li>Coerência local (Local Consistency - LC)</li>
-                                <li>Coerência global (Global Consistency - GC)</li>
-                                <li>Separabilidade de classes (Class Separation Metric)</li>
-                                <li>Métricas baseadas em distâncias (como a correlação entre distâncias originais e projetadas)</li>
-                            </ul>
-                            
-                            <h2 id="resultados">📈 Resultados Esperados</h2>
-                            <p>Espera-se que este trabalho contribua com:</p>
-                            <ul>
-                                <li>Uma análise comparativa abrangente entre t-SNE e UMAP</li>
-                                <li>Diretrizes para a escolha do método mais adequado para diferentes tipos de dados e objetivos</li>
-                                <li>Insights sobre a configuração ótima de parâmetros para cada método</li>
-                                <li>Possíveis melhorias ou combinações dos métodos</li>
-                            </ul>
-                            
-                            <h2 id="cronograma">⏳ Cronograma</h2>
-                            <table>
-                                <tr>
-                                    <th>Período</th>
-                                    <th>Atividades</th>
-                                </tr>
-                                <tr>
-                                    <td>Mês 1-2</td>
-                                    <td>Revisão bibliográfica e estudo teórico dos métodos</td>
-                                </tr>
-                                <tr>
-                                    <td>Mês 3-4</td>
-                                    <td>Implementação e testes preliminares</td>
-                                </tr>
-                                <tr>
-                                    <td>Mês 5-6</td>
-                                    <td>Experimentos e coleta de resultados</td>
-                                </tr>
-                                <tr>
-                                    <td>Mês 7-8</td>
-                                    <td>Análise dos resultados e redação do trabalho</td>
-                                </tr>
-                            </table>
-                            
-                            <h2 id="referencias">📚 Referências</h2>
-                            <ul>
-                                <li><a href="https://jmlr.org/papers/v9/vandermaaten08a.html">van der Maaten, L., & Hinton, G. (2008). Visualizing data using t-SNE. Journal of Machine Learning Research.</a></li>
-                                <li><a href="https://arxiv.org/abs/1802.03426">McInnes, L., Healy, J., & Melville, J. (2018). UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction. arXiv preprint arXiv:1802.03426.</a></li>
-                                <li><a href="https://www.nature.com/articles/s41598-019-45301-0">Becht, E., et al. (2019). Dimensionality reduction for visualizing single-cell data using UMAP. Nature Biotechnology.</a></li>
-                                <li><a href="https://ieeexplore.ieee.org/document/6797061">Venna, J., et al. (2010). Information retrieval perspective to nonlinear dimensionality reduction for data visualization. Journal of Machine Learning Research.</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-        
-        <div class="onload-animation col-span-2 grid-rows-3 mt-4" id="footer">
-            <div class="flex items-center card-base max-w-[var(--page-width)] mx-auto min-h-[4.5rem] px-6 rounded-b-none">
-                <div class="transition text-50 text-sm">
-                    (cc) 2023 Felipe Pereira Ramos Barboza. CC BY-NC 4.0.
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- SVG Symbols -->
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <symbol id="ai:fa6-brands:github" viewBox="0 0 496 512">
-            <path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6c-3.3.3-5.6-1.3-5.6-3.6c0-2 2.3-3.6 5.2-3.6c3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9c2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9c.3 2 2.9 3.3 5.9 2.6c2.9-.7 4.9-2.6 4.6-4.6c-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2c12.8 2.3 17.3-5.6 17.3-12.1c0-6.2-.3-40.4-.3-61.4c0 0-70 15-84.7-29.8c0 0-11.4-29.1-27.8-36.6c0 0-22.9-15.7 1.6-15.4c0 0 24.9 2 38.6 25.8c21.9 38.6 58.6 27.5 72.9 20.9c2.3-16 8.8-27.1 16-33.7c-55.9-6.2-112.3-14.3-112.3-110.5c0-27.5 7.6-41.3 23.6-58.9c-2.6-6.5-11.1-33.3 2.6-67.9c20.9-6.5 69 27 69 27c20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27c13.7 34.7 5.2 61.4 2.6 67.9c16 17.7 25.8 31.5 25.8 58.9c0 96.5-58.9 104.2-114.8 110.5c9.2 7.9 17 22.9 17 46.4c0 33.7-.3 75.4-.3 83.6c0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252C496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2c1.6 1.6 3.9 2.3 5.2 1c1.3-1 1-3.3-.7-5.2c-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9c1.6 1 3.6.7 4.3-.7c.7-1.3-.3-2.9-2.3-3.9c-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2c2.3 2.3 5.2 2.6 6.5 1c1.3-1.3.7-4.3-1.3-6.2c-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2c-1.4-2.3-4-3.3-5.6-2" fill="currentColor"/>
-        </symbol>
-        <symbol id="ai:fa6-brands:linkedin" viewBox="0 0 448 512">
-            <path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5c0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7c-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5c67.2 0 79.7 44.3 79.7 101.9z" fill="currentColor"/>
-        </symbol>
-    </svg>
 </body>
 </html>
