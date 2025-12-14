@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="TCC sobre Redução de Dimensionalidade: Comparação entre t-SNE e UMAP">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCC - Felipe Barboza</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #1f2937;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1, h2, h3 {
+            color: #1f2937;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #4f46e5;
+            padding-bottom: 1rem;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            color: #4f46e5;
+        }
+        
+        ul, ol {
+            padding-left: 1.5rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        a {
+            color: #4f46e5;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f3f4f6;
+        }
+        
+        .author-info {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Redução de Dimensionalidade: Comparação entre t-SNE e UMAP</h1>
+        
+        <div class="author-info">
+            <p><strong>Aluno:</strong> Felipe Pereira Ramos Barboza</p>
+            <p><strong>Orientadora:</strong> Profa. Dra. Nina Sumiko Tomita Hirata</p>
+            <p>Universidade de São Paulo - Instituto de Matemática e Estatística</p>
+            <p>Bacharelado em Ciência da Computação</p>
+        </div>
+        
+        <h2 id="introducao">📑 Introdução</h2>
+        <p>A redução de dimensionalidade é uma técnica fundamental em aprendizado de máquina e análise de dados, permitindo a visualização e interpretação de conjuntos de dados complexos e de alta dimensionalidade. Entre os métodos mais populares atualmente estão o t-SNE (t-Distributed Stochastic Neighbor Embedding) e o UMAP (Uniform Manifold Approximation and Projection), ambos amplamente utilizados para visualização de dados.</p>
+        
+        <h2 id="objetivos">🎯 Objetivos</h2>
+        <p>Este trabalho tem como objetivo principal realizar um estudo comparativo detalhado entre os métodos t-SNE e UMAP, avaliando não apenas suas características algorítmicas, mas também a qualidade perceptiva das projeções geradas por cada método. Os objetivos específicos incluem:</p>
+        <ul>
+            <li>Estudo teórico detalhado dos algoritmos t-SNE e UMAP</li>
+            <li>Implementação e aplicação dos métodos em conjuntos de dados de referência</li>
+            <li>Análise comparativa utilizando métricas de qualidade visual para quantificar a percepção das projeções</li>
+            <li>Avaliação da separação de classes em problemas supervisionados</li>
+            <li>Estudo da preservação de estruturas locais e globais nos dados</li>
+            <li>Análise de sensibilidade aos parâmetros de cada algoritmo</li>
+        </ul>
+        
+        <h2 id="metodologia">🔬 Metodologia</h2>
+        <p>A metodologia do trabalho consistirá em:</p>
+        <ol>
+            <li>Revisão teórica dos algoritmos t-SNE e UMAP, incluindo suas formulações matemáticas e parâmetros principais</li>
+            <li>Implementação dos métodos (ou utilização de bibliotecas estabelecidas como scikit-learn e umap-learn)</li>
+            <li>Seleção de conjuntos de dados de referência com diferentes características (tamanho, dimensionalidade, número de classes)</li>
+            <li>Aplicação dos métodos e avaliação utilizando métricas quantitativas de qualidade de projeção</li>
+            <li>Análise qualitativa das visualizações geradas</li>
+            <li>Comparação sistemática dos resultados</li>
+        </ol>
+        
+        <h2 id="metricas">📊 Métricas de Avaliação</h2>
+        <p>Para avaliar a qualidade das projeções, serão consideradas métricas como:</p>
+        <ul>
+            <li>Trustworthiness e Continuity (medidas de preservação de vizinhança)</li>
+            <li>Diferença média entre as distâncias de cada ponto para seu vizinho mais próximo de outra classe e para o seu vizinho mais próximo da mesma classe (HM)</li>
+            <li>Proporção de pontos x cujo centro de massa de classe mais próximo pertença à mesma classe de x (DSC)</li>
+            <li>Separabilidade de classes (Class Separation Metric)</li>
+            <li>Métricas baseadas em distâncias (como a correlação entre distâncias originais e projetadas)</li>
+        </ul>
+        
+        <h2 id="resultados">📈 Resultados Esperados</h2>
+        <p>Espera-se que este trabalho contribua com:</p>
+        <ul>
+            <li>Uma análise comparativa abrangente entre t-SNE e UMAP</li>
+            <li>Diretrizes para a escolha do método mais adequado para diferentes tipos de dados e objetivos</li>
+            <li>Insights sobre a configuração ótima de parâmetros para cada método</li>
+            <li>Possíveis melhorias ou combinações dos métodos</li>
+        </ul>
+        
+        <h2 id="cronograma">⏳ Cronograma</h2>
+        <table>
+            <tr>
+                <th>Período</th>
+                <th>Atividades</th>
+            </tr>
+            <tr>
+                <td>Mês 1-2</td>
+                <td>Revisão bibliográfica e estudo teórico dos métodos</td>
+            </tr>
+            <tr>
+                <td>Mês 3-4</td>
+                <td>Implementação e testes preliminares</td>
+            </tr>
+            <tr>
+                <td>Mês 5-6</td>
+                <td>Experimentos e coleta de resultados</td>
+            </tr>
+            <tr>
+                <td>Mês 7-8</td>
+                <td>Análise dos resultados e redação do trabalho</td>
+            </tr>
+        </table>
+        
+        <h2 id="referencias">📚 Referências</h2>
+        <ul>
+            <li><a href="https://jmlr.org/papers/v9/vandermaaten08a.html">van der Maaten, L., & Hinton, G. (2008). Visualizing data using t-SNE. Journal of Machine Learning Research.</a></li>
+            <li><a href="https://arxiv.org/abs/1802.03426">McInnes, L., Healy, J., & Melville, J. (2018). UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction. arXiv preprint arXiv:1802.03426.</a></li>
+            <li><a href="https://www.cs.cmu.edu/afs/cs/project/pscico-guyb/realworld/www/slidesF15/dim-redn.pdf">BLELLOCH, Guy E. Lec #16: Dimension Reduction. Algorithms in the Real World (Fall 2015), Carnegie Mellon University. Notas de aula.</a></li>
+            <li><a href="https://pubmed.ncbi.nlm.nih.gov/31567092/">ESPADOTO, Mateus; MARTINS, Rafael M.; KERREN, Andreas; HIRATA, Nina S. T.; TELEA, Alexandru C. Toward a Quantitative Survey of Dimension Reduction Techniques. IEEE Transactions on Visualization and Computer Graphics.</a></li>
+            <li><a href="https://ieeexplore.ieee.org/document/6797061">Venna, J., et al. (2010). Information retrieval perspective to nonlinear dimensionality reduction for data visualization. Journal of Machine Learning Research.</a></li>
+            <li><a href="https://visvar.github.io/pdf/sedlmair2015ddeval.pdf">SEDLMAIR, Michael; AUPETIT, Michaël. Data-driven Evaluation of Visual Quality Measures. In: EUROGRAPHICS CONFERENCE ON VISUALIZATION (EUROVIS), 2015. </a></li>
+        </ul>
+        
+        <div class="footer">
+            <p>(cc) 2025 Felipe Pereira Ramos Barboza. CC BY-NC 4.0.</p>
+        </div>
+    </div>
+</body>
+</html>
